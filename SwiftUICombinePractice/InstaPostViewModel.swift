@@ -12,6 +12,7 @@ final class InstaPostViewModel: ObservableObject{
     @Published private(set) var postList = [TourInfo]()
     @Published private(set) var tourImage = [TourInfo: UIImage]()
     
+    
     private var dataCancellable: Cancellable? {
         didSet { oldValue?.cancel() }
     }
@@ -52,7 +53,7 @@ final class InstaPostViewModel: ObservableObject{
             .map {
                 UIImage(data: $0.data) }
             .replaceError(with: nil)
-            .receive(on: RunLoop.current)
+            .subscribe(on: RunLoop.current)
             .eraseToAnyPublisher()
             .sink(receiveValue: { [weak self] image in
                 self?.tourImage[tourInfo] = image
@@ -60,10 +61,10 @@ final class InstaPostViewModel: ObservableObject{
     }
     
     public func giveHeart(){
-        toggles = true
+        print("giving heart")
     }
     
     public func canceledHeart(){
-        toggles = false
+        print("canceled heart")
     }
 }
